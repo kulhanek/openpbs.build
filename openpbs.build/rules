@@ -9,15 +9,17 @@ export DH_OPTIONS
 # This is ubuntu
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
-DEB_VERSION ?= $(shell lsb_release -c | awk '{print $2}')
+DEB_VERSION ?= $(shell lsb_release -c -s)
 
 CFLAGS += -g -ggdb
 
-ifeq ("x$(DEB_VERSION)", "xnoble")
+ifeq ($(DEB_VERSION),noble)
 OPTIONS = CFLAGS="$(CFLAGS)" \
           --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
           --prefix=/usr/ --with-pbs-server-home=/var/spool/pbs --with-database-user=postgres \
           --with-krbauth PATH_KRB5_CONFIG=/usr/bin/krb5-config.heimdal
+else
+$(error Unsupported Debian/Ubuntu version: $(DEB_VERSION))
 endif
 
 configure: configure-stamp
@@ -61,18 +63,6 @@ install: build
 	mkdir -p $(CURDIR)/debian/openpbs
 	$(MAKE) -C debian/build/openpbs install DESTDIR=$(CURDIR)/debian/openpbs
 
-	cp debian/build/openpbs/src/cmds/scripts/pbs.service debian/openpbs-server.service
-	cp debian/build/openpbs/src/cmds/scripts/pbs.service debian/openpbs-execution.service
-	sed -i '/GuessMainPID=no/d' debian/openpbs-execution.service
-	sed -i '/\[Service\]/a PIDFile=\/var\/spool\/pbs\/mom_priv\/mom.lock' debian/openpbs-execution.service
-	sed -i '/\[Service\]/a KillMode=process' debian/openpbs-execution.service
-	sed -i '/\[Service\]/a StartLimitInterval=0' debian/openpbs-execution.service
-	sed -i '/\[Service\]/a StartLimitBurst=25' debian/openpbs-execution.service
-	sed -i '/\[Service\]/a RestartSec=5' debian/openpbs-execution.service
-	sed -i 's/Restart=.*/Restart=always/g' debian/openpbs-execution.service
-	sed -i '/After=.*/s/$$/ time-sync.target/' debian/openpbs-execution.service
-	sed -i '/TimeoutStartSec=0/d' debian/openpbs-execution.service
-
 ######## openpbs-server
 	$(MAKE) -C debian/build/openpbs install DESTDIR=$(CURDIR)/debian/openpbs-server
 	chmod 4755 debian/openpbs-server/usr/sbin/pbs_rcp
@@ -86,7 +76,6 @@ install: build
 	rm -rf debian/openpbs-server/usr/sbin/pbs_iff
 
 	rm -rf debian/openpbs-server/usr/lib/pkgconfig/
-	rm -rf debian/openpbs-server/lib/
 
 ######## openpbs-execution
 	$(MAKE) -C debian/build/openpbs install DESTDIR=$(CURDIR)/debian/openpbs-execution
@@ -120,7 +109,6 @@ install: build
 	rm -rf debian/openpbs-execution/usr/sbin/pbs_iff
 
 	rm -rf debian/openpbs-execution/usr/lib/pkgconfig/
-	rm -rf debian/openpbs-execution/lib/
 
 ######## openpbs-client
 	$(MAKE) -C debian/build/openpbs install DESTDIR=$(CURDIR)/debian/openpbs-client

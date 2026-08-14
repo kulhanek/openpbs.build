@@ -14,7 +14,7 @@ autoreconf -ivf
 
 # This is ubuntu
 os="ubuntu"
-os_codename="$(lsb_release -c | awk '{print $2}')";
+os_codename="$(lsb_release -c -s)";
 os_version=0;
 
 if [ -z os ] || [ -z os_version ]; then
@@ -22,13 +22,18 @@ if [ -z os ] || [ -z os_version ]; then
 	exit 1
 fi
 
-BUILDDIR=$(mktemp -d);
+BUILDDIR=$PWD/build_tmp_$$
+mkdir -p $BUILDDIR
+echo $BUILDDIR
 cp ${pbs_name}.build/* ${BUILDDIR}
 
 # ubuntu 24.04
 if [ "x$os_codename" == "xnoble" ]; then
 	mv ${BUILDDIR}/control.noble ${BUILDDIR}/control
 	sed -i -- 's/+DEBIAN_VERSION//g' ${BUILDDIR}/changelog
+else
+    echo ">>> ERROR: Unsupported OS: $os_codename"
+    exit 1
 fi
 
 ln -s ${BUILDDIR} debian
