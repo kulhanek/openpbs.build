@@ -1,5 +1,7 @@
 # OpenPBS Build Infrastructure
 
+These build scripts are based on [CESNET/pbs.build](https://github.com/CESNET/pbs.build).
+
 ## Ubuntu 24.04 LTS Kernel
 
 ### Build Instructions
