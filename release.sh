@@ -12,45 +12,10 @@ autoreconf -ivf
 
 # Determine System & it's version
 
-# This is debian/ubuntu
-os=
-os_version=
-os_codename=""
-if [ -r /etc/debian_version ]; then
-	os="debian"
-	major_ver=`cat /etc/debian_version | cut -d. -f1`;
-	
-	# debian 7
-	if [ "$major_ver" == "6" ]; then
-		os_version=6;
-	elif [ "$major_ver" == "7" ]; then
-		os_version=7;
-	elif [ "$major_ver" == "8" ]; then
-		os_version=8;
-	elif [ "$major_ver" == "9" ]; then
-		os_version=9;
-	elif [ "$major_ver" == "10" ]; then
-		os_version=10;
-	elif [ "$major_ver" == "11" ]; then
-		os_version=11;
-	elif [ "$major_ver" == "12" ]; then
-		os_version=12;
-	elif [ "$major_ver" == "13" ]; then
-		os_version=13;
-	elif [ "$major_ver" == "buster/sid" ]; then
-		os_codename="$(lsb_release -c | awk '{print $2}')";
-		os_version=0;
-	elif [ "$major_ver" == "bullseye/sid" ]; then
-		os_codename="$(lsb_release -c | awk '{print $2}')";
-		os_version=0;
-	elif [ "$major_ver" == "bookworm/sid" ]; then
-		os_codename="$(lsb_release -c | awk '{print $2}')";
-		os_version=0;
-	elif [ "$major_ver" == "trixie/sid" ]; then
-		os_codename="$(lsb_release -c | awk '{print $2}')";
-		os_version=0;
-	fi
-fi
+# This is ubuntu
+os="ubuntu"
+os_codename="$(lsb_release -c | awk '{print $2}')";
+os_version=0;
 
 if [ -z os ] || [ -z os_version ]; then
 	echo "ERROR: Unsupported system detected.";
@@ -59,44 +24,8 @@ fi
 
 BUILDDIR=$(mktemp -d);
 cp ${pbs_name}.build/* ${BUILDDIR}
-if [ $os_version -eq 7 ]; then
-	mv ${BUILDDIR}/control.deb7 ${BUILDDIR}/control
-	sed -i -- 's/DEBIAN_VERSION/deb7/g' ${BUILDDIR}/changelog
-elif [ $os_version -eq 8 ]; then
-	mv ${BUILDDIR}/control.deb8 ${BUILDDIR}/control
-	sed -i -- 's/DEBIAN_VERSION/deb8/g' ${BUILDDIR}/changelog
-elif [ $os_version -eq 9 ]; then
-	mv ${BUILDDIR}/control.deb9 ${BUILDDIR}/control
-	sed -i -- 's/DEBIAN_VERSION/deb9/g' ${BUILDDIR}/changelog
-elif [ $os_version -eq 10 ]; then
-	mv ${BUILDDIR}/control.deb10 ${BUILDDIR}/control
-	sed -i -- 's/DEBIAN_VERSION/deb10/g' ${BUILDDIR}/changelog
-elif [ $os_version -eq 11 ]; then
-	mv ${BUILDDIR}/control.deb11 ${BUILDDIR}/control
-	sed -i -- 's/DEBIAN_VERSION/deb11/g' ${BUILDDIR}/changelog
-elif [ $os_version -eq 12 ]; then
-	mv ${BUILDDIR}/control.deb12 ${BUILDDIR}/control
-	sed -i -- 's/DEBIAN_VERSION/deb12/g' ${BUILDDIR}/changelog
-elif [ $os_version -eq 13 ]; then
-	mv ${BUILDDIR}/control.deb13 ${BUILDDIR}/control
-	sed -i -- 's/DEBIAN_VERSION/deb13/g' ${BUILDDIR}/changelog
-fi
 
-if [ "x$os_codename" == "xbionic" ]; then
-	mv ${BUILDDIR}/control.bionic ${BUILDDIR}/control
-	sed -i -- 's/+DEBIAN_VERSION//g' ${BUILDDIR}/changelog
-fi
-
-if [ "x$os_codename" == "xfocal" ]; then
-	mv ${BUILDDIR}/control.focal ${BUILDDIR}/control
-	sed -i -- 's/+DEBIAN_VERSION//g' ${BUILDDIR}/changelog
-fi
-
-if [ "x$os_codename" == "xjammy" ]; then
-	mv ${BUILDDIR}/control.jammy ${BUILDDIR}/control
-	sed -i -- 's/+DEBIAN_VERSION//g' ${BUILDDIR}/changelog
-fi
-
+# ubuntu 24.04
 if [ "x$os_codename" == "xnoble" ]; then
 	mv ${BUILDDIR}/control.noble ${BUILDDIR}/control
 	sed -i -- 's/+DEBIAN_VERSION//g' ${BUILDDIR}/changelog
@@ -105,6 +34,5 @@ fi
 ln -s ${BUILDDIR} debian
 DEB_BUILD_OPTIONS="nostrip noopt" fakeroot ./debian/rules clean
 DEB_BUILD_OPTIONS="nostrip noopt" fakeroot ./debian/rules binary
-
 
 exit 0

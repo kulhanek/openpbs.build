@@ -6,85 +6,14 @@ export DH_VERBOSE=1
 # This has to be exported to make some magic below work.
 export DH_OPTIONS
 
-# These are used for cross-compiling and for saving the configure script
-# from having to guess our platform (since we know it already)
+# This is ubuntu
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
 DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
-DEB_VERSION ?= $(shell cat /etc/debian_version | cut -d. -f1 )
+DEB_VERSION ?= $(shell lsb_release -c | awk '{print $2}')
 
 CFLAGS += -g -ggdb
 
-ifeq ($(DEB_VERSION), 7)
-OPTIONS = LDFLAGS="-L/usr/lib/heimdal/" CFLAGS="$(CFLAGS)" \
-          --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
-          --prefix=/usr/ --with-pbs-server-home=/var/spool/pbs --with-database-user=postgres \
-          --with-krbauth PATH_KRB5_CONFIG=/usr/bin/krb5-config.heimdal
-endif
-
-ifeq ($(DEB_VERSION), 8)
-OPTIONS = CFLAGS="$(CFLAGS)" \
-          --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
-          --prefix=/usr/ --with-pbs-server-home=/var/spool/pbs --with-database-user=postgres \
-          --with-krbauth PATH_KRB5_CONFIG=/usr/bin/krb5-config.heimdal
-endif
-
-ifeq ($(DEB_VERSION), 9)
-OPTIONS = CFLAGS="$(CFLAGS)" \
-          --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
-          --prefix=/usr/ --with-pbs-server-home=/var/spool/pbs --with-database-user=postgres \
-          --with-krbauth PATH_KRB5_CONFIG=/usr/bin/krb5-config.heimdal
-endif
-
-ifeq ($(DEB_VERSION), 10)
-OPTIONS = CFLAGS="$(CFLAGS)" \
-          --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
-          --prefix=/usr/ --with-pbs-server-home=/var/spool/pbs --with-database-user=postgres \
-          --with-krbauth PATH_KRB5_CONFIG=/usr/bin/krb5-config.heimdal
-endif
-
-ifeq ($(DEB_VERSION), 11)
-OPTIONS = CFLAGS="$(CFLAGS)" \
-          --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
-          --prefix=/usr/ --with-pbs-server-home=/var/spool/pbs --with-database-user=postgres \
-          --with-krbauth PATH_KRB5_CONFIG=/usr/bin/krb5-config.heimdal
-endif
-
-ifeq ($(DEB_VERSION), 12)
-OPTIONS = CFLAGS="$(CFLAGS)" \
-          --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
-          --prefix=/usr/ --with-pbs-server-home=/var/spool/pbs --with-database-user=postgres \
-          --with-krbauth PATH_KRB5_CONFIG=/usr/bin/krb5-config.heimdal
-endif
-
-ifeq ($(DEB_VERSION), 13)
-OPTIONS = CFLAGS="$(CFLAGS)" \
-          --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
-          --prefix=/usr/ --with-pbs-server-home=/var/spool/pbs --with-database-user=postgres \
-          --with-krbauth PATH_KRB5_CONFIG=/usr/bin/krb5-config.heimdal
-endif
-
-ifeq ("$(DEB_VERSION)", "buster/sid")
-OPTIONS = CFLAGS="$(CFLAGS)" \
-          --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
-          --prefix=/usr/ --with-pbs-server-home=/var/spool/pbs --with-database-user=postgres \
-          --with-krbauth PATH_KRB5_CONFIG=/usr/bin/krb5-config.heimdal
-endif
-
-ifeq ("$(DEB_VERSION)", "bullseye/sid")
-OPTIONS = CFLAGS="$(CFLAGS)" \
-          --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
-          --prefix=/usr/ --with-pbs-server-home=/var/spool/pbs --with-database-user=postgres \
-          --with-krbauth PATH_KRB5_CONFIG=/usr/bin/krb5-config.heimdal
-endif
-
-ifeq ("$(DEB_VERSION)", "bookworm/sid")
-OPTIONS = CFLAGS="$(CFLAGS)" \
-          --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
-          --prefix=/usr/ --with-pbs-server-home=/var/spool/pbs --with-database-user=postgres \
-          --with-krbauth PATH_KRB5_CONFIG=/usr/bin/krb5-config.heimdal
-endif
-
-ifeq ("$(DEB_VERSION)", "trixie/sid")
+ifeq ("x$(DEB_VERSION)", "xnoble")
 OPTIONS = CFLAGS="$(CFLAGS)" \
           --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) \
           --prefix=/usr/ --with-pbs-server-home=/var/spool/pbs --with-database-user=postgres \
