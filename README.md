@@ -9,7 +9,7 @@ $ git clone https://github.com/kulhanek/openpbs.git -b ubuntu24.04-ltskernel
 $ cd openpbs
 $ cp -r ../openpbs.build/* .
 $ ./release.sh
-'''
+```
 
 This will build the following packages:
 * libopenpbs_23.06.06-15_amd64.deb
