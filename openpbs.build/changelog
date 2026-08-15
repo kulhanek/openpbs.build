@@ -1,3 +1,9 @@
+openpbs-meta (23.06.06-15+ub24lts-1) noble; urgency=low
+
+  * systemd support added
+
+ -- Petr Kulhanek <kulhanek@chemi.muni.cz>  Sat, 15 Aug 2026 23:23:03 +0200
+
 openpbs-meta (23.06.06-15+DEBIAN_VERSION) unstable; urgency=low
 
   * fix libauth_gss dependency
