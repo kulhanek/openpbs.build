@@ -1,3 +1,9 @@
+openpbs-meta (23.06.06-15+ub24lts-5) noble; urgency=low
+
+  * systemd startup updated
+
+ -- Petr Kulhanek <kulhanek@chemi.muni.cz>  Sun, 23 Aug 2026 19:53:49 +0200
+
 openpbs-meta (23.06.06-15+ub24lts-4) noble; urgency=low
 
   * new version due to minor systemd units update
