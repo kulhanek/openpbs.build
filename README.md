@@ -1,6 +1,8 @@
 # OpenPBS Build Infrastructure
 
-These build scripts are based on [CESNET/pbs.build](https://github.com/CESNET/pbs.build).
+* This repository provides a build infrastructure for [kulhanek/OpenPBS](https://github.com/kulhanek/openpbs.git).
+* This work is based on [CESNET/pbs.build](https://github.com/CESNET/pbs.build).
+* Suitable hooks supporting cgroups v2 can be found [here](https://github.com/kulhanek/openpbs.hooks).
 
 ## Ubuntu 24.04 LTS Kernel
 
