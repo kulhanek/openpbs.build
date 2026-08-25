@@ -1,3 +1,9 @@
+openpbs-meta (23.06.06-15+ub24lts-10) noble; urgency=low
+
+  * reosurce comparison flags - still not final, he - bugfix 
+
+ -- Petr Kulhanek <kulhanek@chemi.muni.cz>  Tue, 25 Aug 2026 11:36:27 +0200
+
 openpbs-meta (23.06.06-15+ub24lts-9) noble; urgency=low
 
   * resource comparison flags - final attempt
