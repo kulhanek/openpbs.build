@@ -4,4 +4,8 @@
 
 kill -USR1 $(cat /var/spool/pbs/mom_priv/mom.lock) &>/dev/null
 
+systemctl daemon-reload
+systemctl enable pbs.target
+systemctl restart pbs.target
+
 #DEBHELPER#
