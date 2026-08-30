@@ -1,3 +1,9 @@
+openpbs-meta (23.06.06-15+ub24lts-12) noble; urgency=low
+
+  * new version for union of two branches (comp res + systemd)
+
+ -- Petr Kulhanek <kulhanek@chemi.muni.cz>  Sun, 30 Aug 2026 15:06:57 +0200
+
 openpbs-meta (23.06.06-15+ub24lts-11) noble; urgency=low
 
   * resource comparison flags - still not final, he - mem alloc bugfix 
