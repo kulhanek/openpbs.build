@@ -1,9 +1,21 @@
 #!/bin/bash
 
-/usr/libexec/pbs_postinstall server
+set -e
 
-systemctl daemon-reload
-systemctl enable pbs.target
-systemctl restart pbs.target
+if [ "$1" = "configure" ]; then
+    /usr/libexec/pbs-systemd-helper install-server
+fi
 
-#DEBHELPER#
+# pbs.target is the only installable entry point; component units are reached
+# through its dependency graph and gated by PBS_START_* in /etc/pbs.conf.
+if [ "$1" = "configure" ] || [ "$1" = "abort-upgrade" ] || [ "$1" = "abort-deconfigure" ] || [ "$1" = "abort-remove" ]; then
+    if command -v deb-systemd-helper >/dev/null 2>&1; then
+        deb-systemd-helper unmask 'pbs.target' >/dev/null || true
+        if deb-systemd-helper --quiet was-enabled 'pbs.target'; then
+            deb-systemd-helper enable 'pbs.target' >/dev/null || true
+        else
+            deb-systemd-helper update-state 'pbs.target' >/dev/null || true
+        fi
+    fi
+    systemctl daemon-reload >/dev/null 2>&1 || true
+fi

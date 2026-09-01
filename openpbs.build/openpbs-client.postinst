@@ -1,3 +1,9 @@
 #!/bin/bash
 
-. /usr/libexec/pbs_postinstall client
+set -e
+
+if [ "$1" = "configure" ]; then
+    /usr/libexec/pbs-systemd-helper install-client
+fi
+
+
